@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./src/KylyProductsAPI
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Auth__Username=demo
+      - Auth__Password=demo123
+      - Jwt__Secret=sua_chave_secreta_super_segura_e_longa_aqui_minimo_32_caracteres
+      - Port=5000
+    volumes:
+      - ./sample_db.csv:/app/sample_db.csv
+      - ./lista_relevancia_1.txt:/app/lista_relevancia_1.txt
+      - ./lista_relevancia_2.txt:/app/lista_relevancia_2.txt
+    networks:
+      - kyly-network
+
+  web:
+    build:
+      context: ./src/KylyProductsWeb
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - kyly-network
+    environment:
+      - VITE_API_URL=http://api:5000
+
+networks:
+  kyly-network:
+    driver: bridge

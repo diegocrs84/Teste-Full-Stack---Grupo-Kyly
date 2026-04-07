@@ -1,0 +1,47 @@
+# Git ignore rules for C# and Node.js projects
+
+## C# / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+.vscode/
+Properties/
+*.suo
+*.sln.docstates
+.idea/
+
+## NuGet
+*.nupkg
+*.snupkg
+
+## Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+dist/
+
+## Environment
+.env
+.env.local
+.env.*.local
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Logs
+logs/
+*.log
+
+## Cache
+.cache/
+.parcel-cache/
+
+## IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,34 @@
+* text=auto
+
+# Source files  
+*.cs text eol=crlf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+
+# C#
+*.cs diff=csharp
+
+# Visual Studio
+*.sln text eol=crlf
+*.csproj text eol=crlf
+
+# Scripts
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Data files
+*.csv diff=csv
+*.tsv diff=csv
+
+# Archives
+*.7z binary
+*.gz binary
+*.tar binary
+*.zip binary
+
+# Documents
+*.pdf binary
+*.docx binary
