@@ -18,13 +18,6 @@ namespace KylyProductsAPI.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Busca produtos por palavra-chave com paginação
-        /// </summary>
-        /// <remarks>
-        /// A busca é feita em código do produto, descrição, cor e tamanho.
-        /// Os resultados são ordenados por relevância (Lista 1, Lista 2, sem prioridade).
-        /// </remarks>
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string? keyword, [FromQuery] int page = 1)
         {

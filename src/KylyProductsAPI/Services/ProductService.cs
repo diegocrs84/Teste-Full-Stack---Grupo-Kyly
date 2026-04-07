@@ -1,5 +1,6 @@
 using KylyProductsAPI.Models;
 using System.Globalization;
+using System.IO;
 using CsvHelper;
 
 namespace KylyProductsAPI.Services
@@ -95,12 +96,40 @@ namespace KylyProductsAPI.Services
                 // Carrega produtos do CSV
                 _productsCache = new List<Product>();
 
-                using (var reader = new StreamReader(_csvPath))
+                if (!File.Exists(_csvPath))
+                {
+                    _logger.LogError($"Arquivo CSV não encontrado: {_csvPath}");
+                    throw new FileNotFoundException($"Arquivo CSV não encontrado: {_csvPath}");
+                }
+
+                _logger.LogInformation($"Lendo arquivo CSV de: {_csvPath}");
+                var fileInfo = new FileInfo(_csvPath);
+                _logger.LogInformation($"Tamanho do arquivo: {fileInfo.Length} bytes");
+
+                // Debug: ler as primeiras linhas
+                var allLines = System.IO.File.ReadAllLines(_csvPath, System.Text.Encoding.UTF8);
+                 _logger.LogInformation($"Total de linhas no arquivo: {allLines.Length}");
+                if (allLines.Length > 0)
+                {
+                    _logger.LogInformation($"Primeira linha: {allLines[0]}");
+                    _logger.LogInformation($"Primeira linha bytes: {string.Join(",", System.Text.Encoding.UTF8.GetBytes(allLines[0]).Take(20))}");
+                }
+
+                // Lê o CSV - remove BOM se presente
+                var csvContent = System.IO.File.ReadAllText(_csvPath, System.Text.Encoding.UTF8);
+                if (csvContent.Length > 0 && csvContent[0] == '\uFEFF')
+                {
+                    csvContent = csvContent.Substring(1);
+                }
+                
+                using (var reader = new StringReader(csvContent))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
                     csv.Context.Configuration.Delimiter = ";";
-                    csv.Read(); // Pula header
+                    csv.Context.Configuration.MissingFieldFound = null;
+                    csv.Context.Configuration.BadDataFound = null;
                     csv.ReadHeader();
+                    _logger.LogInformation("Header lido com sucesso");
 
                     while (csv.Read())
                     {
@@ -115,7 +144,6 @@ namespace KylyProductsAPI.Services
                             SizeDescription = csv.GetField("DescTamanho") ?? string.Empty
                         };
 
-                        // Define prioridade
                         if (_relevanceList1?.Contains(product.ProductCode) == true)
                             product.RelevancePriority = 1;
                         else if (_relevanceList2?.Contains(product.ProductCode) == true)

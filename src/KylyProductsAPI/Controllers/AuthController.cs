@@ -17,18 +17,6 @@ namespace KylyProductsAPI.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Autentica um usuário e retorna um token JWT
-        /// </summary>
-        /// <remarks>
-        /// Exemplo de requisição:
-        /// 
-        ///     POST /api/auth/login
-        ///     {
-        ///         "username": "demo",
-        ///         "password": "demo123"
-        ///     }
-        /// </remarks>
         [HttpPost("login")]
         public IActionResult Login([FromBody] AuthRequest request)
         {

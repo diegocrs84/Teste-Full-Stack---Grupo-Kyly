@@ -6,8 +6,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração de banco de dados
-builder.Configuration["DataPath:BasePath"] = Directory.GetCurrentDirectory();
+// Configuração de banco de dados - aponta para a raiz do projeto
+// Sobe dois níveis: de KylyProductsAPI para src para a raiz
+var projectRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "..");
+builder.Configuration["DataPath:BasePath"] = Path.GetFullPath(projectRoot);
 
 // Add services
 builder.Services.AddControllers();

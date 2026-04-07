@@ -210,4 +210,4 @@ Desenvolvido para o teste técnico Grupo Kyly.
 
 ---
 
-**Desenvolvido com ❤️ em C# e React**
+
